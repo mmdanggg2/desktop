@@ -24,7 +24,7 @@ namespace OCC {
 class GETFileJob;
 class SyncJournalDb;
 
-class OWNCLOUDSYNC_EXPORT HydrationJob : public QObject
+class HydrationJob : public QObject
 {
     Q_OBJECT
 public:

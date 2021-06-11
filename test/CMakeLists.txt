@@ -66,7 +66,7 @@ if (WIN32)
     nextcloud_add_test(LongWinPath)
     nextcloud_add_test(SyncCfApi)
 elseif(LINUX) # elseif(LINUX OR APPLE)
-    nextcloud_add_test(SyncXAttr)
+    #nextcloud_add_test(SyncXAttr)
 endif()
 
 nextcloud_add_benchmark(LargeSync)
