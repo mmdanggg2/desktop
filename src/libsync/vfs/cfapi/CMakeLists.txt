@@ -10,10 +10,6 @@ target_link_libraries("${synclib_NAME}_vfs_cfapi"
     cldapi
 )
 
-target_compile_definitions("${synclib_NAME}_vfs_cfapi"
-    PUBLIC -D_WIN32_WINNT=_WIN32_WINNT_WIN10
-)
-
 set_target_properties("${synclib_NAME}_vfs_cfapi" PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${BIN_OUTPUT_DIRECTORY}
     RUNTIME_OUTPUT_DIRECTORY ${BIN_OUTPUT_DIRECTORY}
