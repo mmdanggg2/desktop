@@ -239,7 +239,7 @@ bool LsColXMLParser::parse(const QByteArray &xml, QHash<QString, ExtraFolderInfo
                 QString hrefString = QUrl::fromLocalFile(QUrl::fromPercentEncoding(reader.readElementText().toUtf8()))
                         .adjusted(QUrl::NormalizePathSegments)
                         .path();
-                if (!hrefString.startsWith(expectedPath)) {
+                if (!hrefString.startsWith(expectedPath) && !hrefString.startsWith(expectedPath.chopped(1))) {
                     qCWarning(lcLsColJob) << "Invalid href" << hrefString << "expected starting with" << expectedPath;
                     return false;
                 }

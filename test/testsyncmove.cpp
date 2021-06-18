@@ -6,7 +6,9 @@
  */
 
 #include <QtTest>
+#include "common/result.h"
 #include "syncenginetestutils.h"
+#include <qstringliteral.h>
 #include <syncengine.h>
 
 using namespace OCC;
@@ -83,6 +85,38 @@ class TestSyncMove : public QObject
     Q_OBJECT
 
 private slots:
+    void testMoveCustomRemoteRoot()
+    {
+        FileInfo subFolder(QStringLiteral("AS"), { { QStringLiteral("f1"), 4 } });
+        FileInfo folder(QStringLiteral("A"), { subFolder });
+        FileInfo fileInfo({}, { folder });
+
+        FakeFolder fakeFolder(fileInfo, folder, QStringLiteral("/A"));
+        auto &localModifier = fakeFolder.localModifier();
+        // auto &remoteModifier = fakeFolder.remoteModifier();
+
+        OperationCounter counter;
+        fakeFolder.setServerOverride(counter.functor());
+
+        // Move and then move back again
+        {
+            counter.reset();
+            localModifier.rename(QStringLiteral("AS/f1"), QStringLiteral("f1"));
+
+            ItemCompletedSpy completeSpy(fakeFolder);
+            QVERIFY(fakeFolder.syncOnce());
+
+            QCOMPARE(counter.nGET, 0);
+            QCOMPARE(counter.nPUT, 0);
+            QCOMPARE(counter.nMOVE, 1);
+            QCOMPARE(counter.nDELETE, 0);
+
+            QVERIFY(itemSuccessful(completeSpy, "f1", CSYNC_INSTRUCTION_RENAME));
+            QVERIFY(fakeFolder.currentRemoteState().find("A/f1"));
+            QVERIFY(!fakeFolder.currentRemoteState().find("A/AS/f1"));
+        }
+    }
+
     void testRemoteChangeInMovedFolder()
     {
         // issue #5192
