@@ -93,12 +93,11 @@ private slots:
 
         FakeFolder fakeFolder(fileInfo, folder, QStringLiteral("/A"));
         auto &localModifier = fakeFolder.localModifier();
-        // auto &remoteModifier = fakeFolder.remoteModifier();
 
         OperationCounter counter;
         fakeFolder.setServerOverride(counter.functor());
 
-        // Move and then move back again
+        // Move file and then move it back again
         {
             counter.reset();
             localModifier.rename(QStringLiteral("AS/f1"), QStringLiteral("f1"));
